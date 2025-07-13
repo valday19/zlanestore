@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZLANEE STORE - Order</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+    h1 { color: #333; }
+    form { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+    button { margin-top: 15px; padding: 10px 20px; background: #000; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #333; }
+  </style>
+</head>
+<body>
+  <h1>Form Order - ZLANEE STORE</h1>
+  <form id="orderForm">
+    <label>Nama:</label>
+    <input type="text" name="nama" required />
+
+    <label>Nomor WhatsApp:</label>
+    <input type="text" name="wa" required />
+
+    <label>Pilih Produk:</label>
+    <select name="produk" required>
+      <option value="">-- Pilih Produk --</option>
+      <option value="Jasteb VVIP 1K">Jasteb VVIP - 1K</option>
+      <option value="Jasteb VVIP 2K">Jasteb VVIP - 2K</option>
+      <option value="PT Jasteb 5K">PT Jasteb - 5K</option>
+      <option value="Team Ress 10K">Team Ress - 10K</option>
+      <option value="Admin Ress 20K">Admin Ress - 20K</option>
+      <option value="Panel Pribadi 15K">Panel Jasteb Pribadi - 15K</option>
+      <option value="Sewa Bot 1 Hari">Sewa Bot Pushkontak - 1 Hari</option>
+    </select>
+
+    <label>Pilih Metode Pembayaran:</label>
+    <select name="pembayaran" required>
+      <option value="">-- Pilih Metode --</option>
+      <option value="DANA">DANA</option>
+      <option value="GoPay">GoPay</option>
+      <option value="QRIS">QRIS Allpay</option>
+    </select>
+
+    <label>Link/ID Pembayaran (jika ada):</label>
+    <input type="text" name="bukti" placeholder="Contoh: Screenshot di WA atau ID transfer" />
+
+    <button type="submit">Kirim Order</button>
+  </form>
+
+  <script>
+    const BOT_TOKEN = '7414598655:AAEroWQ277kT5Yy-1kpVblOjRXhOQc_9BAY';
+    const CHAT_ID = '7845232622';
+
+    document.getElementById("orderForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      const pesan = `*Order Baru dari ZLANEE STORE:*
+Nama: ${data.get("nama")}
+WA: ${data.get("wa")}
+Produk: ${data.get("produk")}
+Metode Bayar: ${data.get("pembayaran")}
+Bukti/ID: ${data.get("bukti")}`;
+
+      const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: pesan, parse_mode: "Markdown" })
+      });
+
+      if (res.ok) {
+        alert("Order berhasil dikirim! Kami akan segera hubungi kamu.");
+        e.target.reset();
+      } else {
+        alert("Gagal mengirim order. Coba lagi nanti.");
+      }
+    });
+  </script>
+</body>
+</html>
