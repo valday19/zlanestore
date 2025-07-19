@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Order - ZLANEE STORE</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    #gmailWrap { display: none; }
+  </style>
+</head>
+<body class="bg-dark text-white">
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">🛒 Form Order</h2>
+    <form id="orderForm">
+      <div class="mb-3"><input type="text" class="form-control" id="nama" placeholder="Nama" required></div>
+      <div class="mb-3"><input type="text" class="form-control" id="wa" placeholder="Nomor WhatsApp (08...)" required></div>
+      <div class="mb-3">
+        <select id="produk" class="form-control" required>
+          <option value="">Pilih Produk</option>
+          <option value="JASTEB VVIP 4K">JASTEB VVIP 4K</option>
+          <option value="PT JASTEB">PT JASTEB</option>
+          <option value="Panel 8GB">Panel 8GB</option>
+        </select>
+      </div>
+      <div class="mb-3" id="gmailWrap">
+        <input type="email" class="form-control" id="gmail" placeholder="Gmail untuk JASTEB">
+      </div>
+      <div class="mb-3"><textarea class="form-control" id="catatan" placeholder="Catatan (opsional)"></textarea></div>
+      <button type="submit" class="btn btn-success w-100">Lanjut Upload Bukti</button>
+    </form>
+  </div>
+
+  <script>
+    const produkSelect = document.getElementById('produk');
+    const gmailWrap = document.getElementById('gmailWrap');
+
+    produkSelect.addEventListener('change', () => {
+      const val = produkSelect.value.toLowerCase();
+      gmailWrap.style.display = val.includes('jasteb') ? 'block' : 'none';
+    });
+
+    document.getElementById('orderForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const nama = document.getElementById('nama').value.trim();
+      const wa = document.getElementById('wa').value.trim();
+      const produk = produkSelect.value;
+      const gmail = document.getElementById('gmail').value.trim();
+      const catatan = document.getElementById('catatan').value.trim();
+
+      const newOrder = { nama, wa, produk, catatan, status: 'Menunggu Pembayaran' };
+      if (produk.toLowerCase().includes('jasteb')) {
+        newOrder.gmail = gmail;
+      }
+
+      const res = await fetch('orders.json');
+      const orders = await res.json();
+      orders.push(newOrder);
+
+      await fetch('/api/update-orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orders)
+      });
+
+      sessionStorage.setItem('lastOrderWA', wa);
+      window.location.href = 'upload.html';
+    });
+  </script>
+</body>
+</html>

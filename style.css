@@ -1,0 +1,48 @@
+body {
+  background-color: #111;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1, h2, h3, h4 {
+  color: #0ff;
+  text-shadow: 0 0 5px #0ff;
+}
+
+a {
+  color: #0f0;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #444;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.btn-success {
+  background-color: #00ff99;
+  border: none;
+}
+
+input, textarea, select {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.card {
+  background-color: #222;
+  border: 1px solid #333;
+}
+
+img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+}

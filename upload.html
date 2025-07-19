@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Bukti Pembayaran</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white">
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">📤 Upload Bukti Pembayaran</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="wa" class="form-label">Nomor WhatsApp</label>
+        <input type="text" id="wa" name="wa" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="bukti" class="form-label">Upload Gambar Bukti</label>
+        <input type="file" id="bukti" name="bukti" class="form-control" accept="image/*" required>
+      </div>
+      <button type="submit" class="btn btn-success w-100">Kirim Bukti</button>
+    </form>
+    <div id="status" class="text-center mt-4"></div>
+  </div>
+
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('wa', document.getElementById('wa').value.trim());
+      formData.append('bukti', document.getElementById('bukti').files[0]);
+
+      const res = await fetch('/api/upload-bukti', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await res.json();
+      document.getElementById('status').textContent = result.message;
+    });
+
+    // Auto isi WA dari session
+    const lastWA = sessionStorage.getItem('lastOrderWA');
+    if (lastWA) {
+      document.getElementById('wa').value = lastWA;
+    }
+  </script>
+</body>
+</html>
